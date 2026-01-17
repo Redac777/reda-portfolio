@@ -17,20 +17,15 @@ export default function Admin() {
   const load = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const apiUrl = import.meta.env.VITE_CONTACT_API_URL as string;
-      const token = import.meta.env.VITE_ADMIN_TOKEN as string;
-      if (!apiUrl) throw new Error("Missing VITE_CONTACT_API_URL");
-      if (!token) throw new Error("Missing VITE_ADMIN_TOKEN");
-
-      const url = new URL(apiUrl);
-      url.searchParams.set("token", token);
-
-      const res = await fetch(url.toString());
+      const res = await fetch("/api/messages");
       const data = await res.json().catch(() => ({}));
 
-      if (!res.ok || !data.ok)
+      if (!res.ok || !data.ok) {
         throw new Error(data.error || "Failed to load messages");
+      }
+
       setItems(Array.isArray(data.items) ? data.items : []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
@@ -48,6 +43,7 @@ export default function Admin() {
       <div className="mx-auto max-w-5xl px-4 py-16">
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-3xl font-bold">Admin</h1>
+
           <button
             onClick={load}
             className="rounded-xl px-4 py-2 border border-zinc-300/40 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/10 transition"
@@ -59,6 +55,7 @@ export default function Admin() {
         {loading && (
           <p className="mt-6 text-zinc-600 dark:text-zinc-400">Loading...</p>
         )}
+
         {error && (
           <p className="mt-6 text-red-600 dark:text-red-400">{error}</p>
         )}
@@ -78,15 +75,18 @@ export default function Admin() {
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                     <div>
                       <p className="font-semibold">{m.name || "—"}</p>
+
                       <p className="text-sm text-zinc-600 dark:text-zinc-400">
                         {m.email || "—"} • {m.lang || "—"}
                       </p>
+
                       {m.subject ? (
                         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
                           Subject: {m.subject}
                         </p>
                       ) : null}
                     </div>
+
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
                       {m.createdAt || ""}
                     </p>

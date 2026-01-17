@@ -20,10 +20,7 @@ export default function ContactSection() {
     setError(null);
 
     try {
-      const apiUrl = import.meta.env.VITE_CONTACT_API_URL as string;
-      if (!apiUrl) throw new Error("Missing VITE_CONTACT_API_URL");
-
-      const res = await fetch(apiUrl, {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, subject, message, lang: language }),
@@ -51,7 +48,9 @@ export default function ContactSection() {
       className="mx-auto max-w-5xl px-4 py-20 border-t border-zinc-200 dark:border-white/10"
     >
       <h2 className="text-2xl font-semibold">{t.contact.title}</h2>
-      <p className="mt-2 text-zinc-700 dark:text-zinc-300">{t.contact.subtitle}</p>
+      <p className="mt-2 text-zinc-700 dark:text-zinc-300">
+        {t.contact.subtitle}
+      </p>
 
       <form onSubmit={submit} className="mt-8 grid gap-4 max-w-2xl">
         <div className="grid gap-4 sm:grid-cols-2">
@@ -103,6 +102,7 @@ export default function ContactSection() {
               {language === "fr" ? "Message envoyé ✅" : "Message sent ✅"}
             </span>
           )}
+
           {status === "error" && (
             <span className="text-sm text-red-600 dark:text-red-400">
               {error || (language === "fr" ? "Erreur" : "Error")}
