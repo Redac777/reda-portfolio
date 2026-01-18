@@ -5,10 +5,10 @@ export default function AboutSection() {
   const { t } = useLanguage();
 
   return (
-    <section className="py-20 border-t border-zinc-200 dark:border-white/10">
-      <div className="mx-auto max-w-5xl px-4">
+    <section className="py-24 border-t border-neutral-200 dark:border-neutral-800">
+      <div className="mx-auto max-w-6xl px-6">
         <SectionTitle>{t.about.title}</SectionTitle>
-        <div className="mt-6 space-y-4 text-zinc-700 dark:text-zinc-300">
+        <div className="mt-8 space-y-4 text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-3xl">
           {t.about.description.map((p, idx) => (
             <p key={idx}>{p}</p>
           ))}

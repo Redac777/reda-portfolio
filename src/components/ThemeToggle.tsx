@@ -6,11 +6,10 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="cursor-pointer rounded-xl border border-zinc-300/30 dark:border-white/10 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/10 transition"
+      className="p-2.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 transition-colors duration-200"
       aria-label="Toggle theme"
-      title="Toggle theme"
     >
-      {theme === "dark" ? "🌙" : "☀️"}
+      <span className="text-base">{theme === "dark" ? "🌙" : "☀️"}</span>
     </button>
   );
 }

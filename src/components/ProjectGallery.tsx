@@ -22,7 +22,7 @@ export default function ProjectGallery({
 
   if (!list.length) {
     return (
-      <div className="h-64 flex items-center justify-center bg-zinc-100 dark:bg-black/40 text-zinc-500 text-sm">
+      <div className="h-48 flex items-center justify-center bg-neutral-100 dark:bg-neutral-900 text-neutral-500 text-sm rounded-t-xl">
         Screenshots coming soon
       </div>
     );
@@ -33,23 +33,23 @@ export default function ProjectGallery({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="relative h-64 w-full text-left"
+        className="relative h-48 w-full text-left group"
         aria-label="Open image preview"
         title="Click to preview"
       >
         <img
           src={list[index]}
           alt={`${altBase} screenshot ${index + 1}`}
-          className="h-64 w-full object-cover transition-transform duration-300 hover:scale-[1.03]"
+          className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
 
-        <div className="absolute bottom-3 left-3 rounded-full bg-black/60 text-white text-xs px-3 py-1">
+        <div className="absolute bottom-3 left-3 rounded-full bg-black/60 text-white text-xs px-3 py-1 backdrop-blur-sm">
           Click to preview
         </div>
 
         {list.length > 1 && (
-          <div className="absolute top-3 right-3 rounded-full bg-black/60 text-white text-xs px-2 py-1">
+          <div className="absolute top-3 right-3 rounded-full bg-black/60 text-white text-xs px-2 py-1 backdrop-blur-sm">
             {index + 1}/{list.length}
           </div>
         )}
@@ -60,7 +60,7 @@ export default function ProjectGallery({
           <button
             type="button"
             onClick={prev}
-            className="absolute left-3 -top-12 rounded-full bg-black/50 text-white w-9 h-9 flex items-center justify-center hover:bg-black/70 transition"
+            className="absolute left-3 -top-12 rounded-full bg-black/50 text-white w-9 h-9 flex items-center justify-center hover:bg-black/70 transition backdrop-blur-sm"
             aria-label="Previous image"
             title="Previous"
           >
@@ -70,7 +70,7 @@ export default function ProjectGallery({
           <button
             type="button"
             onClick={next}
-            className="absolute right-3 -top-12 rounded-full bg-black/50 text-white w-9 h-9 flex items-center justify-center hover:bg-black/70 transition"
+            className="absolute right-3 -top-12 rounded-full bg-black/50 text-white w-9 h-9 flex items-center justify-center hover:bg-black/70 transition backdrop-blur-sm"
             aria-label="Next image"
             title="Next"
           >

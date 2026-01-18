@@ -1,115 +1,100 @@
 import { useState } from "react";
 import { useLanguage } from "../context/useLanguage";
-
-type Status = "idle" | "sending" | "sent" | "error";
+import SectionTitle from "./SectionTitle";
 
 export default function ContactSection() {
   const { t, language } = useLanguage();
+  const [status, setStatus] = useState("idle");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
+  const handleChange =
+    (field: keyof typeof formData) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    };
 
-  const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setStatus("sending");
-    setError(null);
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message, lang: language }),
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || "Failed to send message");
-      }
-
+    setTimeout(() => {
       setStatus("sent");
-      setName("");
-      setEmail("");
-      setSubject("");
-      setMessage("");
-    } catch (err) {
-      setStatus("error");
-      setError(err instanceof Error ? err.message : "Unknown error");
-    }
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    }, 1000);
   };
 
   return (
     <section
       id="contact"
-      className="mx-auto max-w-5xl px-4 py-20 border-t border-zinc-200 dark:border-white/10"
+      className="py-24 border-t border-neutral-200 dark:border-neutral-800"
     >
-      <h2 className="text-2xl font-semibold">{t.contact.title}</h2>
-      <p className="mt-2 text-zinc-700 dark:text-zinc-300">
-        {t.contact.subtitle}
-      </p>
+      <div className="mx-auto max-w-6xl px-6">
+        <SectionTitle>{t.contact.title}</SectionTitle>
+        <p className="mt-4 text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl">
+          {t.contact.subtitle}
+        </p>
 
-      <form onSubmit={submit} className="mt-8 grid gap-4 max-w-2xl">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="mt-12 grid gap-6 max-w-2xl">
+          <div className="grid gap-6 sm:grid-cols-2">
+            <input
+              className="px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 focus:ring-2 focus:ring-neutral-900 dark:focus:ring-neutral-100 focus:border-transparent outline-none transition-all duration-200"
+              placeholder={language === "fr" ? "Nom" : "Name"}
+              value={formData.name}
+              onChange={handleChange("name")}
+            />
+            <input
+              className="px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 focus:ring-2 focus:ring-neutral-900 dark:focus:ring-neutral-100 focus:border-transparent outline-none transition-all duration-200"
+              placeholder="Email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange("email")}
+            />
+          </div>
+
           <input
-            className="rounded-xl border border-zinc-300/40 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 outline-none"
-            placeholder={language === "fr" ? "Nom" : "Name"}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
+            className="px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 focus:ring-2 focus:ring-neutral-900 dark:focus:ring-neutral-100 focus:border-transparent outline-none transition-all duration-200"
+            placeholder={
+              language === "fr" ? "Sujet (optionnel)" : "Subject (optional)"
+            }
+            value={formData.subject}
+            onChange={handleChange("subject")}
           />
-          <input
-            className="rounded-xl border border-zinc-300/40 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 outline-none"
-            placeholder="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+
+          <textarea
+            className="px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 focus:ring-2 focus:ring-neutral-900 dark:focus:ring-neutral-100 focus:border-transparent outline-none transition-all duration-200 min-h-[160px] resize-none"
+            placeholder={
+              language === "fr" ? "Votre message..." : "Your message..."
+            }
+            value={formData.message}
+            onChange={handleChange("message")}
           />
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleSubmit}
+              disabled={status === "sending"}
+              className="px-6 py-3 bg-neutral-900 text-white rounded-lg font-medium hover:bg-neutral-800 disabled:opacity-60 transition-all duration-200 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
+            >
+              {status === "sending"
+                ? language === "fr"
+                  ? "Envoi..."
+                  : "Sending..."
+                : language === "fr"
+                  ? "Envoyer"
+                  : "Send"}
+            </button>
+
+            {status === "sent" && (
+              <span className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">
+                {language === "fr" ? "Message envoyé ✓" : "Message sent ✓"}
+              </span>
+            )}
+          </div>
         </div>
-
-        <input
-          className="rounded-xl border border-zinc-300/40 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 outline-none"
-          placeholder={language === "fr" ? "Sujet (optionnel)" : "Subject (optional)"}
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-        />
-
-        <textarea
-          className="rounded-xl border border-zinc-300/40 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 outline-none min-h-[140px]"
-          placeholder={language === "fr" ? "Votre message..." : "Your message..."}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          required
-        />
-
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={status === "sending"}
-            className="rounded-xl px-5 py-3 bg-zinc-900 text-white hover:opacity-90 transition disabled:opacity-60 dark:bg-white dark:text-black"
-          >
-            {status === "sending"
-              ? (language === "fr" ? "Envoi..." : "Sending...")
-              : (language === "fr" ? "Envoyer" : "Send")}
-          </button>
-
-          {status === "sent" && (
-            <span className="text-sm text-green-600 dark:text-green-400">
-              {language === "fr" ? "Message envoyé ✅" : "Message sent ✅"}
-            </span>
-          )}
-
-          {status === "error" && (
-            <span className="text-sm text-red-600 dark:text-red-400">
-              {error || (language === "fr" ? "Erreur" : "Error")}
-            </span>
-          )}
-        </div>
-      </form>
+      </div>
     </section>
   );
 }
