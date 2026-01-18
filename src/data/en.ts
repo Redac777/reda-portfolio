@@ -35,7 +35,7 @@ export const en: PortfolioData = {
       { title: "Backend", items: [".NET (C# v6–9)", "REST APIs", "Entity Framework"] },
       { title: "Databases", items: ["SQL Server", "MySQL"] },
       { title: "Cloud & DevOps", items: ["Azure DevOps", "App Services", "Static Web Apps", "CI/CD Pipelines", "Docker"] },
-      { title: "Tools & Methods", items: ["Git/GitHub", "Scrum", "UML"] },
+      { title: "Tools & Methods", items: ["Git/GitHub", "Scrum", "UML","Clickup","Slack"] },
       { title: "Bonus / AI", items: ["React", "Vue.js", "MongoDB", "Firebase", "Azure OpenAI", "Document Intelligence", "Speech recognition"] },
     ],
   },

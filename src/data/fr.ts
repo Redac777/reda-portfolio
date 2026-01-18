@@ -56,7 +56,7 @@ export const fr: PortfolioData = {
       },
       {
         title: "Outils & Méthodes",
-        items: ["Git/GitHub", "Scrum", "UML"],
+        items: ["Git/GitHub", "Scrum", "UML","Clickup","Slack"],
       },
       {
         title: "Bonus / IA",
